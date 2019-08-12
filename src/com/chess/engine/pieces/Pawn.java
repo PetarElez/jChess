@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,15 +44,31 @@ public class Pawn extends Piece {
 
                 }
             }else if(currentCandidateOffset==7 &&
-                    ((BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ) ||
-                    (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())) ){
+                    !((BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite()  ||
+                    (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())) ) ){
+                if(board.getTile(candidateDestinatioinCoordiante).isTileOccupied()){
+                    final Piece pieceOnCandidate=board.getTile(candidateDestinatioinCoordiante).getPiece();
+                    if(this.pieceAlliance!=pieceOnCandidate.getPieceAllience()){
+                        legalMoves.add(new MajorMove(board,this,candidateDestinatioinCoordiante));
 
-            }else if(currentCandidateOffset==9){
+                    }
+                }
+
+            }else if(currentCandidateOffset==9 &&
+                    !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite()  ||
+                     (BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())) )){
+                if(board.getTile(candidateDestinatioinCoordiante).isTileOccupied()){
+                    final Piece pieceOnCandidate=board.getTile(candidateDestinatioinCoordiante).getPiece();
+                    if(this.pieceAlliance!=pieceOnCandidate.getPieceAllience()){
+                        legalMoves.add(new MajorMove(board,this,candidateDestinatioinCoordiante));
+
+                    }
+                }
 
             }
         }
 
 
-        return legalMoves;
+        return ImmutableList.copyOf(legalMoves);
     }
 }
