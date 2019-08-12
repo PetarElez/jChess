@@ -37,8 +37,6 @@ public enum Alliance {
     public abstract int getDiresction();
     public abstract boolean isWhite();
     public abstract boolean isBlack();
-    public boolean pero(){
-        return true;
-    }
+
 
 }
